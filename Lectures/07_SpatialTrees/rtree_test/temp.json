@@ -1,0 +1,51 @@
+{
+    "type": "Feature",
+    "properties": {
+        "mag": 1.45,
+        "place": "Hawaii region, Hawaii",
+        "time": 441763825580,
+        "updated": 1585679115900,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/hv19834377",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=hv19834377&format=geojson",
+        "felt": null,
+        "cdi": null,
+        "mmi": null,
+        "alert": null,
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 32,
+        "net": "hv",
+        "code": "19834377",
+        "ids": ",hv19834377,",
+        "sources": ",hv,",
+        "types": ",origin,phase-data,",
+        "nst": 33,
+        "dmin": null,
+        "rms": 0.12,
+        "gap": 34,
+        "magType": "ml",
+        "type": "earthquake",
+        "title": "M 1.5 - Hawaii region, Hawaii"
+    },
+    "geometry": {
+        "type": "Point",
+        "coordinates": [
+            -155.4228333,
+            19.39,
+            8.45
+        ]
+    },
+    "id": "hv19834377"
+}
+],
+"bbox": [
+-179.674,
+-60.951,
+-3.48,
+179.462,
+83.071,
+617.9
+]
+}
+}

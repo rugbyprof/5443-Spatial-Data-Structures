@@ -1,0 +1,739 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9">
+    <!--[if IE]>
+    <script type="text/javascript">
+    window.location = "redirect.html";
+    </script>
+    <![endif]-->
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="World" content="">
+
+    <title>World</title>
+    <link rel="shortcut icon" type="image/png" href="favicon.png" />
+
+    <!-- Bootstrap Core CSS -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="assets/css/bootstrap-custom.css" rel="stylesheet">
+
+    <!-- JQuery/JQueryUI  -->
+    <script src="assets/js/jquery.js"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css"
+        integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
+
+    <!-- Mapbox GL -->
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.css' rel='stylesheet' />
+
+    <!-- Turf -->
+    <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/turf/v3.0.11/turf.min.js'></script>
+
+    <!-- Layer Tree Plugin -->
+    <script src='assets/plugins/layerTree/js/layer-tree.js'></script>
+    <link href='assets/plugins/layerTree/dist/css/styles.min.css' rel='stylesheet' />
+    <link href='assets/plugins/layerTree/dist/css/layer-tree-group-settings.css' rel='stylesheet' />
+
+    <!-- Mapbox GL Draw API -->
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.4/mapbox-gl-draw.js'></script>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.4/mapbox-gl-draw.css'
+        type='text/css' />
+
+    <!-- Mapbox GL Geocoder API -->
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.0.1/mapbox-gl-geocoder.js'></script>
+    <link rel='stylesheet'
+        href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.0.1/mapbox-gl-geocoder.css'
+        type='text/css' />
+
+    <!-- Layer Search -->
+    <link href="assets/plugins/jsonSearch/chosen/chosen.css" rel="stylesheet">
+    <script src="assets/plugins/jsonSearch/layerSearch.js"></script>
+
+    <!-- JQuery UI -->
+    <link rel="stylesheet" href="assets/jquery-ui/jquery-ui.min.css" type="text/css">
+    <script src="assets/jquery-ui/jquery-ui.js"></script>
+
+    <!-- Misc. CSS -->
+    <link href='assets/css/styles-custom.css' rel='stylesheet' />
+    <link href='assets/css/text-editor-style.css' rel='stylesheet' />
+
+    <style>
+        #map {
+            position: absolute;
+            top: 50px;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /*mapbox gl css override*/
+        .mapboxgl-ctrl-group {
+            border-radius: 0px;
+            -moz-box-shadow: none;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .mapboxgl-ctrl-bottom-left .mapboxgl-ctrl {
+            margin: 0 0 10px 65px;
+            float: left;
+        }
+
+        .mapboxgl-ctrl-group:not(:empty) {
+            -moz-box-shadow: 0 0 0px rgba(0, 0, 0, 0.1);
+            -webkit-box-shadow: 0 0 0px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.1);
+        }
+
+        .mapboxgl-ctrl-group>button+button {
+            border-top: 0;
+        }
+
+        .custom-combobox {
+            position: relative;
+            display: inline-block;
+        }
+
+        .custom-combobox-toggle {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            margin-left: -1px;
+            padding: 0;
+        }
+
+        .custom-combobox-input {
+            margin: 0;
+            padding-top: 2px;
+            padding-bottom: 5px;
+            padding-right: 5px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <script>
+        // initial load screen script
+        $(window).load(function () {
+            $(".se-pre-con").delay(2000).fadeOut(700);
+        });
+    </script>
+
+    <script>
+        document.addEventListener('touchmove', function (e) {
+            e.preventDefault();
+        }, { passive: false });
+    </script>
+
+    <!--initial load screen -->
+    <div class="se-pre-con">
+        <h2 style="text-align: center; margin-top:20%; color: white">
+            <i class="fa fa-cog fa-spin"></i>&nbsp;+&nbsp;<i class="fa fa-globe"></i>&nbsp;=&nbsp;<i
+                class="fas fa-grin-hearts"></i>
+        </h2>
+    </div>
+
+    <div id="wrapper">
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a style="display: inline-flex" class="navbar-brand"><i class="fa fa-globe"></i>&nbsp;World</a>
+            </div>
+
+            <!-- Top Menu Items -->
+            <ul class="nav navbar-right top-nav">
+
+                <!-- Bookmarks -->
+                <!-- Bookmarks -->
+                <!-- Bookmarks -->
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Bookmarks"><i
+                            class="fa fa-bookmark"></i><b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a id="icelandBookmark"><i class="fa fa-fw fa-map-marker"></i> Iceland</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a id="safricaBookmark"><i class="fa fa-fw fa-map-marker"></i> S. Africa</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a id="japanBookmark"><i class="fa fa-fw fa-map-marker"></i> Japan</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a id="australiaBookmark"><i class="fa fa-fw fa-map-marker"></i> Australia</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Contact"><i
+                            class="fa fa-question-circle"></i><b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="mailto:email@email.com?subject=email"><i class="fa fa-fw fa-envelope"></i> Contact
+                                Us</a>
+                        </li>
+
+                        <li class="divider"></li>
+
+                        <li>
+                            <a class="clickable" data-toggle="modal" data-target="#disclaimerModal"><i
+                                    class="fa fa-fw fa-gavel"></i> Disclaimer</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <!-- Sidebar Menu Tools -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav side-nav">
+
+                    <li>
+                        <!-- Layer List Button -->
+                        <a class="clickable" data-toggle="modal" data-target="#layersModal" title="Layer List"><i
+                                class="fa fa-fw fa-list" id="list-load"></i></a>
+                    </li>
+
+                    <li>
+                        <!-- Layer Attributes -->
+                        <a class="clickable" data-toggle="modal" data-target="#attributesModal"
+                            title="Layer's Attributes"><i class="fa fa-fw fa-info"></i></a>
+                    </li>
+
+                    <li>
+                        <!-- Draw Button -->
+                        <a class="clickable" data-toggle="modal" data-target="#drawModal" title="Draw & Measure"><i
+                                class="fas fa-fw fa-pencil-alt"></i></a>
+                    </li>
+
+                    <li>
+                        <!-- Coordinates/Address Button -->
+                        <a class="clickable" data-toggle="modal" data-target="#geolocationModal"
+                            title="Search Address & Coords."><i class="fas fa-fw fa-map-marker-alt"></i></a>
+                    </li>
+
+
+                    <li> 
+                        <!-- Plane Crash Button -->
+                        <a class="clickable" data-toggle="modal" data-target="#testModal"
+                            title="Airplane Crashes">
+                            <span class="fa-stack">
+                                <i class="fab fa-gripfire fa-2x"  style="color:Tomato"></i>
+                                <i class="fas fa-plane fa-stack-1x fa-rotate-90" style="color:white; left:-5px;top:4px"></i>
+                              </span>
+                            </a>
+                    </li>
+
+                    <li>
+                        <!-- Search Button -->
+                        <a class="clickable" data-toggle="modal" data-target="#searchModal"
+                            title="Search Layer Attributes"><i class="fa fa-fw fa-search"></i></a>
+                    </li>
+
+                    <li>
+                        <!-- Print Map Button -->
+                        <a class="stop-print-click" id='mapboxgl-ctrl-print' data-toggle='modal'
+                            data-target='#map-print-modal' title="Print Map"><i class="fa fa-fw fa-print"></i></a>
+                    </li>
+
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Start Modals - Tool Panels -->
+        <!-- Start Modals - Tool Panels -->
+        <!-- Start Modals - Tool Panels -->
+        <!-- Layer List Modal -->
+        <!-- Layer List Modal -->
+        <!-- Layer List Modal -->
+        <div class="modal left fade" id="layersModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel"><i class="fa fa-fw fa-list"></i>&nbsp;Layers</h4>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <div id="menu"></div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Attributes Modal -->
+        <!-- Attributes Modal -->
+        <!-- Attributes Modal -->
+        <div class="modal left fade" id="attributesModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel"><i class="fa fa-fw fa-info"></i>&nbsp;Layer Attributes
+                        </h4>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <div>
+                            <div style="font-size:xx-small; margin:0"><i style="color:#dc4f4f"
+                                    class="fa fa-fw fa-exclamation-circle"></i> Select a layer on the map to display
+                                attributes...</div>
+                            <div style="font-size: 12px" id="layer-attribute"></div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Draw Modal -->
+        <!-- Draw Modal -->
+        <!-- Draw Modal -->
+        <div class="modal left fade" id="drawModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel"><i class="fa fa-fw fa-pencil-alt"></i>&nbsp;Draw Tools
+                        </h4>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <hr>
+                        <br />
+
+                        <p style="font-size: 12px"><i class="fas fa-draw-polygon"></i> Use the Draw tools to create
+                            mark-ups on the map.</p>
+                        <div id="drawAppend"></div>
+
+                        <div style="display: flex; flex-direction: row">
+                            <div id='customDrawColor' style="padding-top: 7px;"></div>
+                        </div>
+
+                        <br />
+                        <hr>
+                        <br />
+
+                        <p style="font-size: 12px"><i class="fas fa-ruler"></i> Use the Draw tools above to calculate
+                            area and distance.</p>
+
+                        <p style="font-size: 12px; margin: 0;">area:</p>
+                        <div id='calculated-area'> </div>
+
+                        <p style="font-size: 12px; margin: 0;">length/perimeter:</p>
+                        <div id='calculated-length'></div>
+
+                        <div style="display: inline-flex">
+                            <i style="font-size:smaller; margin: 5px 4px 0px 4px;"><input type="radio" name="unit"
+                                    id="feet" value="feet" checked="checked" /> ft &nbsp;</i>
+                            <i style="font-size:smaller; margin: 5px 4px 0px 4px;"><input type="radio" name="unit"
+                                    id="meter" value="meter" /> m &nbsp;</i>
+                            <i style="font-size:smaller; margin: 5px 4px 0px 4px;"><input type="radio" name="unit"
+                                    id="mile" value="mile" /> mi &nbsp;</i>
+                            <i style="font-size:smaller; margin: 5px 4px 0px 4px;"><input type="radio" name="unit"
+                                    id="kilometer" value="kilometer" /> km &nbsp;</i>
+                            <i style="font-size:smaller; margin: 5px 0px 0px 4px;"><input type="radio" name="unit"
+                                    id="acre" value="acre" /> acres &nbsp;</i>
+                        </div>
+
+
+                        <br />
+                        <hr style="margin-top: 15px">
+                        <br />
+
+                        <!--Text Tool-->
+                        <p style="font-size: 12px"><i class="fas fa-align-left"></i> Add and edit text on the map:</p>
+
+                        <div style="display: inline-flex; width: 100%">
+                            <button id="textTool" active='false' onclick="activateTool(this)"><i
+                                    class="fa fa-fw fa-plus"></i> Add Text</button>
+                            <button id="editTextTool" active='false' onclick="activateTool(this)"><i
+                                    class="fa fa-fw fa-edit"></i> Edit Text</button>
+                        </div>
+
+                        <br />
+
+                        <div style="display: inline-flex; width: 100%; padding-top: 8px">
+                            <div id='customTextColor' style="padding-top: 7px;"></div>
+                            <div id='customTextSize'
+                                style="padding-left: 10px; font-family: 'Times New Roman', Times, serif;"></div>
+                        </div>
+
+                        <br />
+                        <hr style="margin-top: 10px; margin-bottom: 10px">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Modal -->
+        <!-- Search Modal -->
+        <!-- Search Modal -->
+        <div class="modal left fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel"><i class="fa fa-fw fa-search"></i>&nbsp;Search Tools
+                        </h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <p style="margin-bottom: -1px; padding: 0px 0px 5px 0px; width: 100%;"><br />Step 1. Pick
+                            searchable layer...</p>
+                        <select class="layer-picker" id="json_layer" data-placeholder="Layer Picker"></select>
+                        <br />
+                        <p style="margin-bottom: -1px; padding: 0px 0px 5px 0px; width: 100%;"><br />Step 2. Start
+                            searching...</p>
+                        <p style="margin-bottom: -1px; padding: 5px 5px 5px 5px; width: 100%; background-color: #fafafa; color: #528ea7; font-size: smaller; "
+                            id="property-descr"><br /></p>
+
+                        <div style="display: inline-flex;" id="target_layer">
+                            <input type="search" id="general_search" placeholder="Properties" />
+                            <input type="hidden" id="property-value"><br />
+                            <button class="clickable" type="submit" id="search_general"><i
+                                    class="fa fa-search"></i></button>
+                            <button class="clickable" type="submit" id="clear_general"><i
+                                    class="fa fa-eraser"></i></button>
+                        </div>
+
+                        <script>
+                            //Allows user to hit enter to search for json property
+                            $("#general_search").keyup(function (event) {
+                                if (event.keyCode == 13) {
+                                    $("#search_general").click();
+                                }
+                            });
+                        </script>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Terry Modal -->
+        <!-- Terry Modal -->
+        <!-- Terry Modal -->
+        <!-- <i class="fas fa-plane-arrival fa-rotate-90"></i> -->
+        <div class="modal left fade" id="testModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel"><i class="fas fa-plane fa-rotate-90"></i>&nbsp;Airplane Crashes</h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="ui-widget">
+                                    <label>Choose State:</label>
+                                    <input type="string" id='stateInput'
+                                        style="font-size: 12px; padding: 2px; margin:2px; width:200px" placeholder="State"><br>
+                                    <select id="statesComboBox" style="font-size: 12px; padding: 2px; margin:2px;  width:200px">
+                                        <option></option>
+                                    </select>
+                                </div>
+
+                                <!-- <select class="form-control form-control-lg" name="category" id="statesDropDown">
+                                </select> -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                //Allows user to hit enter to search for json property
+                $("#stateInput").keyup(function( event ) {
+                    // $("#statesComboBox").click();
+                    populateStatesCombo();
+                });
+                function populateStatesCombo(){
+                    let filter = $("#stateInput").val()
+
+                    $.get("http://localhost:8080/states?filter="+filter, function (data) {
+                        //console.log(data);
+                        html = '';
+                        let count = data['count'];
+                        //console.log(count);
+
+                        for (var i = 0; i < data['results'].length; i++) {
+                            let abbr = data['results'][i].abbreviation;
+                            let name = data['results'][i].name;
+                            html += '<option value="' + abbr + '">' + name + '</option>';
+                        }
+                        $("#statesComboBox").attr("size",count);
+                        $('#statesComboBox').html(html);
+                        //console.log(html);
+
+                    });
+                }
+                $("#statesComboBox").click(function () {
+
+                });
+
+            </script>
+        </div>
+
+        <!-- Location Modal -->
+        <!-- Location Modal -->
+        <!-- Location Modal -->
+        <div class="modal left fade" id="geolocationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel"><i
+                                class="fas fa-fw fa-map-marker-alt"></i>&nbsp;Location Tools</h4>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <hr>
+                        <br />
+
+                        <!-- enter lng/lat -->
+                        <div style="vertical-align:top;">
+                            <p style="font-size: 12px"><i class="fas fa-map-marked-alt"></i> Enter Coordinates</p>
+                            <input type="number" id='lngInput' style="font-size: 11px; padding: 2px; margin:2px"
+                                placeholder="longitude"><br>
+                            <input type="number" id='latInput' style="font-size: 11px; padding: 2px; margin:2px"
+                                placeholder="latitude"><br>
+
+                            <div style="padding-top:10px">
+                                <input type="button" value="find" id="findLLButton" style="font-size: 10px;">
+                                <input type="button" value="clear" id="findLLButtonClear" style="font-size: 10px;">
+                            </div>
+                        </div>
+
+                        <br />
+                        <hr>
+                        <br />
+
+                        <!-- lng/lat on map click -->
+                        <p style="font-size: 12px"><i class="fas fa-mouse-pointer"></i> Click on map to find lng/lat:
+                        </p>
+                        <pre id='info'><i class="fa fa-fw fa-globe"></i> lng/lat</pre>
+
+                        <br />
+                        <hr>
+                        <br />
+
+                        <!-- address geocode api-->
+                        <p style="font-size: 12px"><i class="fas fa-home"></i> Address Search:</p>
+                        <div id="addressAppend"></div>
+
+                        <br />
+                        <hr>
+                        <br />
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Print Modal -->
+        <!-- Print Modal -->
+        <!-- Print Modal -->
+        <div id="map-print-modal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"><i class="fa fa-fw fa-print"></i>&nbsp;Print Map</h4>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <!-- print form -->
+                        <form class="form-horizontal container-fluid" id="print-form">
+                            <div class="row">
+
+                                <!-- title -->
+                                <div class="col">
+                                    <div class="form-group col-sm-12">
+                                        <label>Map Title:</label>
+                                        <input id="export-title" name="export-title" type="text"
+                                            style="font-size: smaller" placeholder="Title..."
+                                            class="form-control input-md" maxlength="90">
+                                    </div>
+                                </div>
+
+                                <!-- output format -->
+                                <div class="radio-groups format form-group col-sm-12">
+
+                                    <div>
+                                        <label>Format: </label>
+                                        <label class="radio-inline" for="output-format-0">
+                                            <input type="radio" name="output-format" id="output-format-0" value="png">
+                                            PNG
+                                        </label>
+                                        <label class="radio-inline" for="output-format-1">
+                                            <input type="radio" name="output-format" id="output-format-1" value="pdf"
+                                                checked="checked">
+                                            PDF
+                                        </label>
+
+                                    </div>
+                                </div>
+                                <!-- format/dimensions -->
+                                <div class="radio-groups size form-group col-sm-12">
+
+                                    <div>
+                                        <label>Dimensions: </label>
+                                        <label class="radio-inline" for="dimensions-0">
+                                            <input type="radio" name="dimensions" id="dimensions-0" value="default"
+                                                checked="checked">
+                                            8.5 x 11
+                                        </label>
+                                        <label class="radio-inline" for="dimensions-1">
+                                            <input type="radio" name="dimensions" id="dimensions-1" value="large">
+                                            11 x 17 (legend)
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <button type="button" id="export-map" class="button button" data-dismiss="modal"><i
+                                            class="fa fa-fw fa-print"></i> Create Map</button>
+                                    <div style="padding-top: 13px; font-size:xx-small; margin:0"><i
+                                            style="color:#dc4f4f" class="fa fa-fw fa-exclamation-circle"></i> This may
+                                        take a few seconds...</div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+        <!-- Disclaimer Modal -->
+        <!-- Disclaimer Modal -->
+        <!-- Disclaimer Modal -->
+        <div id="disclaimerModal" class="modal" role="dialog">
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"><i class="fa fa-fw fa-gavel"></i>&nbsp;Disclaimer</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            A place to put your disclaimer... Surely everyone will read it.
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Load Map Div -->
+        <!-- Load Map Div -->
+        <!-- Load Map Div -->
+        <div id='map'></div>
+
+        <!-- Load coordinates div (Part of Geolocation Modal)-->
+        <div id='coordinates' class='coordinates'></div>
+
+    </div>
+
+    <!-- Print JS and required Libs -->
+    <!-- cdn -->
+    <!--<script src='https://cdn.rawgit.com/blueimp/JavaScript-Canvas-to-Blob/master/js/canvas-to-blob.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/1.8.177/pdf.combined.min.js'></script>
+    <script src='https://cdn.rawgit.com/eligrey/FileSaver.js/master/FileSaver.min.js'></script>
+    <script src='https://cdn.rawgit.com/niklasvh/html2canvas/master/dist/html2canvas.min.js'></script>
+    <script src='https://cdn.rawgit.com/fengyuanchen/cropper/master/dist/cropper.min.js'></script>-->
+    <!-- local -->
+    <script src='assets/plugins/print-export/libs/canvas-to-blob.min.js'></script>
+    <script src='assets/plugins/print-export/libs/jspdf.min.js'></script>
+    <script src='assets/plugins/print-export/libs/pdf.combined.min.js'></script>
+    <script src='assets/plugins/print-export/libs/FileSaver.min.js'></script>
+    <script src='assets/plugins/print-export/libs/html2canvas.min.js'></script>
+    <script src='assets/plugins/print-export/libs/cropper.min.js'></script>
+    <script src='assets/js/print.js'></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="assets/bootstrap/bootstrap.min.js"></script>
+
+    <!-- Leaflet JavaScript -->
+    <script src="assets/leaflet/leaflet.js"></script>
+
+    <!-- Map JavaScript -->
+    <script src="assets/js/map.js"></script>
+
+    <!-- Search Layer Config -->
+    <script src="assets/plugins/jsonSearch/layers.js"></script>
+
+    <!-- Layer Search Scripts -->
+    <script src="assets/plugins/jsonSearch/chosen/chosen.jquery.js"></script>
+
+    <script type="text/javascript">
+        $("#json_layer").change(function () {
+            $("#general_search").val("");
+            $("#property-descr").html("<br />");
+            var source_name = $('#json_layer').val();
+            refreshJsonSource(source_name);
+        });
+    </script>
+
+</body>
+
+</html>

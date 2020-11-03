@@ -1,0 +1,23 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "United States"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [63.8539, -153.0531],
+                        [63.8539, -75.5336],
+                        [25.3115, -153.0531],
+                        [25.3115, -75.5336],
+                        [63.8539, -153.0531]
+                    ]
+                ]
+            }
+        }
+    ]
+}

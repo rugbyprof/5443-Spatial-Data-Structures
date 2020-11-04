@@ -2,6 +2,36 @@
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes
 
+class LayerObj {
+    constructor(id,color,name) {
+        this._id = id;
+        this._color = color;
+        this._name = name;
+    }
+    get id() {
+        return this._id;
+    }
+    get color() {
+        return this._color;
+    } 
+    get name() {
+        return this._name;
+    } 
+    set id(value) {
+        this._id = value;
+    }
+    set name(color) {
+        this._color = value;s
+    }
+    set name(value) {
+        this._name = value;
+    }
+}
+
+function timeStamp(){
+    return Date.now().toString();
+}
+
 var layers = [];
 
 class LayerManager {
@@ -21,6 +51,42 @@ class LayerManager {
     // Method
     addLayer(id) {
        this.layers.push(id);
+    }
+
+    printLayerIds(){
+        for(let i=0;i<this.layers.length;i++){
+            console.log(this.layers[i]);
+        }
+    }
+    size(){
+        return this.layers.length;
+    }
+
+    removeLayerId(id) {
+        for (let i = 0; i < this.layers.length; i++) {
+            if (this.layers[i].id == id) {
+                delete this.layers[i];
+                return true
+            }
+        }
+        return false;
+    }
+
+    removeMapLayer(id) {
+        var mapLayer = map.getLayer(id);
+        if (typeof mapLayer !== 'undefined') {
+            // Remove map layer & source.
+            map.removeLayer(id).removeSource(id);
+            this.removeLayerId(id);
+        }
+
+    }
+
+    removeAllLayers(){
+        const layersClone = this.layers.slice();
+        for (let i = 0; i < layersClone.length; i++) {
+            removeMapLayer(layersClone[i].id)
+        }
     }
   }
 

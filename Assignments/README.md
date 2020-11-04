@@ -5,6 +5,7 @@
  | [A02](https://github.com/rugbyprof/5443-Spatial-Data-Structures/tree/master/Assignments/A02) | [ Assignment 2 ](https://github.com/rugbyprof/5443-Spatial-Data-Structures/tree/master/Assignments/A02) | [ 1 Way Communication (you to me)](https://github.com/rugbyprof/5443-Spatial-Data-Structures/tree/master/Assignments/A02) | [08-26-2020 (Wednesday @ 4:30 p.m.)](https://github.com/rugbyprof/5443-Spatial-Data-Structures/tree/master/Assignments/A02) |
  | [A03](https://github.com/rugbyprof/5443-Spatial-Data-Structures/tree/master/Assignments/A03) | [ Assignment 3 ](https://github.com/rugbyprof/5443-Spatial-Data-Structures/tree/master/Assignments/A03) | [ Flask Spatial API](https://github.com/rugbyprof/5443-Spatial-Data-Structures/tree/master/Assignments/A03) | [10-02-2020 (Friday @ 5:30 p.m.)](https://github.com/rugbyprof/5443-Spatial-Data-Structures/tree/master/Assignments/A03) |
  | [A04](https://github.com/rugbyprof/5443-Spatial-Data-Structures/tree/master/Assignments/A04) | [ Assignment 4 ](https://github.com/rugbyprof/5443-Spatial-Data-Structures/tree/master/Assignments/A04) | [ Visualizing Spatial Data](https://github.com/rugbyprof/5443-Spatial-Data-Structures/tree/master/Assignments/A04) | [10-14-2020 (Wednesday @ 4:30 p.m.)](https://github.com/rugbyprof/5443-Spatial-Data-Structures/tree/master/Assignments/A04) |
+ | [A05](https://github.com/rugbyprof/5443-Spatial-Data-Structures/tree/master/Assignments/A05) | [ Assignments A05 ](https://github.com/rugbyprof/5443-Spatial-Data-Structures/tree/master/Assignments/A05) | [ No Description](https://github.com/rugbyprof/5443-Spatial-Data-Structures/tree/master/Assignments/A05) | [N/A](https://github.com/rugbyprof/5443-Spatial-Data-Structures/tree/master/Assignments/A05) |
  
     
 ## File Legend
@@ -17,4 +18,4 @@
 |xx-**T**xx | This is a ***Test***. Usually when on github, it will start out as a study guide, then get accompanied with a solution after the exam. |
 
     
-<sup>Last Updated: 2020-10-11 (Sun @ 15:10)</sup>
+<sup>Last Updated: 2020-11-04 (Wed @ 17:32)</sup>

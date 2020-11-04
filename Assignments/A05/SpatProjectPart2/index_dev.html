@@ -110,9 +110,7 @@
             $(".se-pre-con").delay(2000).fadeOut(700);
         });
 
-        function spinloader() {
-            return '<div id="circle"><div class="loader"><div class="loader"><div class="loader"><div class="loader"></div></div></div></div></div>';
-        }
+
 
     </script>
 
@@ -768,51 +766,53 @@
                         Bases</h4>
                 </div>
 
-                <div class="modal-body">
+                <div class="modal-body" id="basemodalbod">
 
                     <button id="gogogettem">GO</button>
-
+                    <button id="gogogetids">IDS</button>
+                    <button id="gogogetrom">XXX</button>
                 </div>
                 <script>
-                    function uuidv4() {
-                        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-                            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-                            return v.toString(16);
-                        });
+
+                    function spinloader() {
+                        return '<i class="fa fa-cog fa-spin" id="circlespin"></i>';
+                        //return '<div id="circlespin"><div class="loader"><div class="loader"><div class="loader"><div class="loader"></div></div></div></div></div>';
                     }
-                    function randomColor(){
-                        let color =  "#" +  Math.floor(Math.random()*16777215).toString(16);
-                        while(color.length <7){
+                    function randomColor() {
+                        let color = "#" + Math.floor(Math.random() * 16777215).toString(16);
+                        while (color.length < 7) {
                             color += 'A';
                         }
                         return color;
                     }
-                    
-                    // 'data': {
-                    //                 'type': 'Feature',
-                    //                 'geometry': {
-                    //                     'type': 'Polygon',
-                    //                     'coordinates': coords
-                    //                 }
-                    //             }
 
+                    $("#gogogetids").click(function (event) {
+                        lm.printLayerIds();
+                        console.log(lm.size());
+                    });
+
+                    $("#gogogetrom").click(function (event) {
+                        console.log("clicked-remove");
+                        lm.removeAllLayers();
+                    });
 
                     $("#gogogettem").click(function (event) {
-
+                       
+                        
+                        $('#basemodalbod').append(spinloader());
+                        console.log("clicked-size-check");
                         $.get("http://localhost:8080/bases", function (data) {
 
-                            //results = data['features'];
+                            for (i = 0; i < data['features'].length; i++) {
+                                let ts = timeStamp();
+                                let tl = new LayerObj("base_" + i.toString(), randomColor(), "this is base " + i.toString())
+                                addGeoJsonFeature(tl.id, data['features'][i]);
+                                lm.addLayer(tl);
+                                console.log(tl);
 
-                            console.log(data);
-
-                            console.log(uuidv4());
-                            addGeoJsonFeature(uuidv4(), data);
-
-                            for(i=0;i<data['features'].length;i++){
-                                addGeoJsonFeature(uuidv4(), data['features'][i]);
                             }
-
-                            });
+                            $('#circlespin').remove();
+                        });
                     });
                     function addGeoJsonFeature(id, feature) {
                         //removeMapLayer(id);

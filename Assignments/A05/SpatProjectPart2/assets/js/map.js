@@ -3,10 +3,10 @@
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes
 
 class LayerObj {
-    constructor(id,color,name) {
+    constructor(id,color,description) {
         this._id = id;
         this._color = color;
-        this._name = name;
+        this._description = description;
     }
     get id() {
         return this._id;
@@ -24,7 +24,7 @@ class LayerObj {
         this._color = value;s
     }
     set name(value) {
-        this._name = value;
+        this._description = value;
     }
 }
 
@@ -58,14 +58,18 @@ class LayerManager {
             console.log(this.layers[i]);
         }
     }
+
     size(){
         return this.layers.length;
     }
 
     removeLayerId(id) {
+        console.log(id);
         for (let i = 0; i < this.layers.length; i++) {
+            console.log(this.layers[i].id + '==' + id)
             if (this.layers[i].id == id) {
-                delete this.layers[i];
+                console.log("deleting");
+                this.layers.splice(i,1);
                 return true
             }
         }
@@ -73,6 +77,7 @@ class LayerManager {
     }
 
     removeMapLayer(id) {
+        console.log(id);
         var mapLayer = map.getLayer(id);
         if (typeof mapLayer !== 'undefined') {
             // Remove map layer & source.

@@ -771,13 +771,15 @@
                     <button id="gogogettem">GO</button>
                     <button id="gogogetids">IDS</button>
                     <button id="gogogetrom">XXX</button>
+                    <button id="gogogekill">Kill9</button>
                 </div>
                 <script>
 
                     function spinloader() {
-                        return '<i class="fa fa-cog fa-spin" id="circlespin"></i>';
-                        //return '<div id="circlespin"><div class="loader"><div class="loader"><div class="loader"><div class="loader"></div></div></div></div></div>';
+                        //return '<i class="fa fa-cog fa-spin" id="circlespin"></i>';
+                        return '<div id="circlespin"><div class="loader"><div class="loader"><div class="loader"><div class="loader"></div></div></div></div></div>';
                     }
+
                     function randomColor() {
                         let color = "#" + Math.floor(Math.random() * 16777215).toString(16);
                         while (color.length < 7) {
@@ -785,6 +787,11 @@
                         }
                         return color;
                     }
+                    $("#gogogekill").click(function (event) {
+                        console.log(lm.size());
+                        lm.removeMapLayer("base_9");
+                        console.log(lm.size());
+                    });       
 
                     $("#gogogetids").click(function (event) {
                         lm.printLayerIds();
@@ -808,7 +815,7 @@
                                 let tl = new LayerObj("base_" + i.toString(), randomColor(), "this is base " + i.toString())
                                 addGeoJsonFeature(tl.id, data['features'][i]);
                                 lm.addLayer(tl);
-                                console.log(tl);
+                                //console.log(tl);
 
                             }
                             $('#circlespin').remove();

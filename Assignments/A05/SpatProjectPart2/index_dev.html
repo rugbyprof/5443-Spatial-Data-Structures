@@ -772,9 +772,11 @@
                     <button id="gogogetids">IDS</button>
                     <button id="gogogetrom">XXX</button>
                     <button id="gogogekill">Kill9</button>
+
+                    
                 </div>
                 <script>
-
+                    
                     function spinloader() {
                         //return '<i class="fa fa-cog fa-spin" id="circlespin"></i>';
                         return '<div id="circlespin"><div class="loader"><div class="loader"><div class="loader"><div class="loader"></div></div></div></div></div>';
@@ -787,15 +789,18 @@
                         }
                         return color;
                     }
+
                     $("#gogogekill").click(function (event) {
                         console.log(lm.size());
                         lm.removeMapLayer("base_9");
                         console.log(lm.size());
                     });       
 
+
                     $("#gogogetids").click(function (event) {
                         lm.printLayerIds();
                         console.log(lm.size());
+                        
                     });
 
                     $("#gogogetrom").click(function (event) {
@@ -805,16 +810,16 @@
 
                     $("#gogogettem").click(function (event) {
                        
-                        
                         $('#basemodalbod').append(spinloader());
                         console.log("clicked-size-check");
                         $.get("http://localhost:8080/bases", function (data) {
 
                             for (i = 0; i < data['features'].length; i++) {
-                                let ts = timeStamp();
+                                //let ts = timeStamp();
                                 let tl = new LayerObj("base_" + i.toString(), randomColor(), "this is base " + i.toString())
                                 addGeoJsonFeature(tl.id, data['features'][i]);
                                 lm.addLayer(tl);
+                                lm.addClickEvent(tl.id);
                                 //console.log(tl);
 
                             }
@@ -824,9 +829,11 @@
                     function addGeoJsonFeature(id, feature) {
                         //removeMapLayer(id);
                         //layerTracker.push(id);
+                        console.log(feature['properties']);
                         map.addSource(id, {
                             'type': 'geojson',
-                            'data': feature
+                            'data': feature,
+                            'properties':feature['properties']
                         });
                         map.addLayer({
                             'id': id,

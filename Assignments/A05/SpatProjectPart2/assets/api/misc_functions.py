@@ -10,6 +10,9 @@ AVG_EARTH_RADIUS = 6371  # in km
 # Interesting source of functions
 # http://www.edwilliams.org/avform.htm
 
+def randomPoints(polygon):
+    
+
 
 def haversine(point1, point2, miles=True):
     """ Calculate the great-circle distance between two points on the Earth surface.

@@ -63,6 +63,16 @@ class LayerManager {
         return this.layers.length;
     }
 
+    layerInfo(id){
+        map.getStyle().sources
+        var mapLayer = map.getLayer(id);
+        if (typeof mapLayer !== 'undefined') {
+            return mapLayer;
+        }else{
+            return {};
+        }
+    }
+
     removeLayerId(id) {
         console.log(id);
         for (let i = 0; i < this.layers.length; i++) {
@@ -92,6 +102,40 @@ class LayerManager {
         for (let i = 0; i < layersClone.length; i++) {
             removeMapLayer(layersClone[i].id)
         }
+    }
+
+    addClickEvent(id){
+        var info = this.layerInfo(id);
+        console.log(info);
+        map.on('click', id, function (e) {
+
+            var coordinates = e.features[0].geometry.coordinates.slice();
+            console.log(coordinates.length);
+            var description = e.features[0].properties.description;
+             
+            // Ensure that if the map is zoomed out such that multiple
+            // copies of the feature are visible, the popup appears
+            // over the copy being pointed to.
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            }
+
+
+            new mapboxgl.Popup()
+            .setLngLat(coordinates[0][0])
+            .setHTML(description)
+            .addTo(map);
+        });
+         
+        // Change the cursor to a pointer when the mouse is over the places layer.
+        map.on('mouseenter', id, function () {
+            map.getCanvas().style.cursor = 'pointer';
+        });
+         
+        // Change it back to a pointer when it leaves.
+        map.on('mouseleave', id, function () {
+            map.getCanvas().style.cursor = '';
+        });
     }
   }
 
